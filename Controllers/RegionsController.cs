@@ -51,7 +51,7 @@ namespace NZWalks.API.Controllers
         public async Task<IActionResult> GetById([FromRoute]Guid id){
             // var region=dbContext.Regions.Find(id);
             //retrieving data from db using Domain-Models
-            var regionDomain= await dbContext.Regions.FirstOrDefaultAsync(x=>x.Id==id);
+            var regionDomain= await regionRepository.GetByIdAsync(id);
             if(regionDomain==null){
                 return NotFound();
             }
