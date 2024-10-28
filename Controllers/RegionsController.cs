@@ -70,7 +70,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("code/{code}")]
         public async Task<IActionResult> GetByCode([FromRoute]String code){
-            var regions= await dbContext.Regions.Where(x=>x.Code==code).ToListAsync();
+            var regions= await regionRepository.GetByCodeAsync(code);
             if(!regions.Any()){
                 return NotFound();
             }
@@ -82,7 +82,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("{name}")]
         public async Task<IActionResult> GetByName([FromRoute]string name){
-            var regions=await dbContext.Regions.Where(x=>x.Name.Contains(name)).ToListAsync();
+            var regions=await regionRepository.GetByNameAsync(name);
             if(!regions.Any()){
                 return NotFound();
             }
@@ -100,8 +100,7 @@ namespace NZWalks.API.Controllers
             };
 
             //using domain-model to insert data into db
-            await dbContext.Regions.AddAsync(regionDomainModel);
-            await dbContext.SaveChangesAsync();
+            regionDomainModel=await regionRepository.CreateRegionAsync(regionDomainModel);
 
             //Map Domain-Model back to dto to send back to client
             var regionDto=new RegionDto{
@@ -117,13 +116,12 @@ namespace NZWalks.API.Controllers
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IActionResult> DeleteRegion([FromRoute]Guid id){
-            var regionDomainModel=await dbContext.Regions.FindAsync(id);
+            var regionDomainModel=await regionRepository.GetByIdAsync(id);
             if(regionDomainModel is null){
                 return NotFound();
             }
             //Remove has no async Version
-            dbContext.Regions.Remove(regionDomainModel);
-            await dbContext.SaveChangesAsync();
+            await regionRepository.DeleteRegionAsync(id);
 
             var regionDto=new RegionDto{
                 Id=regionDomainModel.Id,
