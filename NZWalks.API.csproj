@@ -16,4 +16,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+<!-- excluding file from being compiled -->
+  <ItemGroup>
+  <Compile Remove="Repositories/InMemoryRegionRepository.cs" />
+</ItemGroup>
+
+
 </Project>
