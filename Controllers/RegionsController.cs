@@ -70,7 +70,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("code/{code}")]
         public async Task<IActionResult> GetByCode([FromRoute]String code){
-            var regions= await dbContext.Regions.Where(x=>x.Code==code).ToListAsync();
+            var regions= await regionRepository.GetByCodeAsync(code);
             if(!regions.Any()){
                 return NotFound();
             }
