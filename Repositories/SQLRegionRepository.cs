@@ -32,5 +32,10 @@ namespace NZWalks.API.Repositories
         {
             return await dbContext.Regions.Where(x=>x.Code==code).ToListAsync();
         }
+
+        public async Task<List<Region>> GetByNameAsync(string name)
+        {
+            return await dbContext.Regions.Where(x=>x.Name.Contains(name)).ToListAsync();
+        }
     }
 }

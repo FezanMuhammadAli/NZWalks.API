@@ -82,7 +82,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("{name}")]
         public async Task<IActionResult> GetByName([FromRoute]string name){
-            var regions=await dbContext.Regions.Where(x=>x.Name.Contains(name)).ToListAsync();
+            var regions=await regionRepository.GetByNameAsync(name);
             if(!regions.Any()){
                 return NotFound();
             }
