@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
+using NZWalks.API.Models.DTOs;
 
 namespace NZWalks.API.Repositories
 {
@@ -23,7 +24,7 @@ namespace NZWalks.API.Repositories
             return await dbContext.Regions.ToListAsync();
         }
 
-        public async Task<Region> GetByIdAsync(Guid id)
+        public async Task<Region?> GetByIdAsync(Guid id)
         {
             return await dbContext.Regions.FindAsync(id);
         }
@@ -36,6 +37,25 @@ namespace NZWalks.API.Repositories
         public async Task<List<Region>> GetByNameAsync(string name)
         {
             return await dbContext.Regions.Where(x=>x.Name.Contains(name)).ToListAsync();
+        }
+
+        public async Task<Region> CreateRegionAsync(Region region)
+        {
+            await dbContext.Regions.AddAsync(region);
+            await dbContext.SaveChangesAsync();
+            return region;
+        }
+
+        public async Task<Region?> DeleteRegionAsync(Guid id)
+        {
+            var region=await dbContext.Regions.FindAsync(id);
+            if(region is null)
+            {
+                return null;
+            }
+            dbContext.Regions.Remove(region);
+            await dbContext.SaveChangesAsync();
+            return region;
         }
     }
 }
