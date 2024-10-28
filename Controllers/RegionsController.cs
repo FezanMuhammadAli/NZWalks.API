@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTOs;
+using NZWalks.API.Repositories;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace NZWalks.API.Controllers
@@ -17,17 +18,19 @@ namespace NZWalks.API.Controllers
     public class RegionsController: ControllerBase
     {
         private readonly NZWalksDbContext dbContext;
+        private readonly IRegionRepository regionRepository;
 
-        public RegionsController(NZWalksDbContext dbContext)
+        public RegionsController(NZWalksDbContext dbContext,IRegionRepository regionRepository)
         {
             this.dbContext = dbContext;
+            this.regionRepository = regionRepository;
         }
 
         // GET ALL REGIONS          #1
         [HttpGet]
         public async Task<IActionResult> GetAll(){
             //using Domain-Models retrieving data from DB
-            var regionsDomain=await dbContext.Regions.ToListAsync();
+            var regionsDomain=await regionRepository.GetAllAsync();
             //Map Domain-Models to DTO
             var regionDto=new List<RegionDto>();
             foreach(var regionDomain in regionsDomain){
