@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +20,13 @@ namespace NZWalks.API.Controllers
     {
         private readonly NZWalksDbContext dbContext;
         private readonly IRegionRepository regionRepository;
+        private readonly IMapper mapper;
 
-        public RegionsController(NZWalksDbContext dbContext,IRegionRepository regionRepository)
+        public RegionsController(NZWalksDbContext dbContext,IRegionRepository regionRepository,IMapper mapper)
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
+            this.mapper = mapper;
         }
 
         // GET ALL REGIONS          #1
@@ -32,15 +35,16 @@ namespace NZWalks.API.Controllers
             //using Domain-Models retrieving data from DB
             var regionsDomain=await regionRepository.GetAllAsync();
             //Map Domain-Models to DTO
-            var regionDto=new List<RegionDto>();
-            foreach(var regionDomain in regionsDomain){
-                regionDto.Add(new RegionDto(){
-                    Id=regionDomain.Id,
-                    Code=regionDomain.Code,
-                    Name=regionDomain.Name,
-                    RegionImageUrl=regionDomain.RegionImageUrl
-                });
-            }
+            // var regionDto=new List<RegionDto>();
+            // foreach(var regionDomain in regionsDomain){
+            //     regionDto.Add(new RegionDto(){
+            //         Id=regionDomain.Id,
+            //         Code=regionDomain.Code,
+            //         Name=regionDomain.Name,
+            //         RegionImageUrl=regionDomain.RegionImageUrl
+            //     });
+            // }
+            var regionDto=mapper.Map<List<RegionDto>>(regionsDomain);
             //return DTO
             return Ok(regionDto);
         }
