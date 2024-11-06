@@ -23,6 +23,16 @@ namespace NZWalks.API.Repositories
             return walk;
         }
 
+        public async Task<Walk?> DeleteByIdAsync(Guid id)
+        {
+            var walk=await nZWalksDbContext.Walks.FindAsync(id);
+            if(walk is null) return null;
+
+            nZWalksDbContext.Walks.Remove(walk);
+            await nZWalksDbContext.SaveChangesAsync();
+            return walk;
+        }
+
         public async Task<List<Walk>> GetAllAsync()
         {
             return await nZWalksDbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();

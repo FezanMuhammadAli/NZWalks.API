@@ -12,5 +12,6 @@ namespace NZWalks.API.Repositories
         Task<List<Walk>>GetAllAsync();
         Task<Walk?> GetByIdAsync(Guid id);
         Task<Walk?> UpdateByIdAsync(Guid id, Walk walk);
+        Task<Walk?>DeleteByIdAsync(Guid id);
     }
 }
