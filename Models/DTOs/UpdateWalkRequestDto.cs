@@ -7,14 +7,15 @@ namespace NZWalks.API.Models.DTOs
 {
     public class UpdateWalkRequestDto
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public double LengthInKm { get; set; }
+        
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required double LengthInKm { get; set; }
         public string? WalkImageUrl { get; set; }
 
         //adding foreign keys
-        public Guid DifficultyId { get; set; }
-        public Guid RegionId { get; set; }
+        public required Guid DifficultyId { get; set; }
+        public required Guid RegionId { get; set; }
 
     }
 }
